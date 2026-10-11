@@ -1,0 +1,133 @@
+    1  hostnamectl
+    2  ip addr
+    3  ip route
+    4  mkdir -p /root/mephi-session-project-2026
+    5  cd /root/mephi-session-project-2026
+    6  pwd
+    7  ping -c 4 8.8.8.8 > /root/mephi-session-project-2026/ping.out
+    8  cat /root/mephi-session-project-2026/ping.out
+    9  dnf upgrade -y
+   10  dnf install -y nginx libcap-ng-utils
+   11  cd /tmp
+   12  dnf download tcpdump
+   13  ls -l /tmp/tcpdump*.rpm
+   14  rpm -ivh /tmp/tcpdump-4.99.5-1.red80.x86_64.rpm
+   15  rpm -q tcpdump
+   16  command -v tcpdump
+   17  dnf history > /root/mephi-session-project-2026/dnf.out
+   18  cat /root/mephi-session-project-2026/dnf.out
+   19  lsblk
+   20  fdisk /dev/sdb
+   21  lsblk
+   22  mkfs.ext4 -L MEPHI_WEB /dev/sdb1
+   23  blkid /dev/sdb1
+   24  mkdir -p /mephi-web
+   25  nano /etc/fstab
+   26  mount -a
+   27  systemctl daemon-reload
+   28  mount -a
+   29  mount | grep /mephi-web
+   30  df -h /mephi-web
+   31  grep MEPHI_WEB /etc/fstab
+   32  systemctl enable --now nginx
+   33  systemctl status nginx
+   34  journalctl -u nginx -b > /root/mephi-session-project-2026/journalctl.out
+   35  cat /root/mephi-session-project-2026/journalctl.out
+   36  groupadd developers
+   37  groupadd -g 4444 curators
+   38  useradd -m -u 5501 -g developers user1
+   39  useradd -m -u 5502 -g developers user2
+   40  useradd -m -u 5503 -g developers user3
+   41  useradd -m -g curators curator1
+   42  useradd -m -g curators curator2
+   43  mkdir -p /data/mephi-2026
+   44  id user1
+   45  id user2
+   46  id user3
+   47  id curator1
+   48  id curator2
+   49  getent group developers
+   50  getent group curators
+   51  command -v setfacl
+   52  chown root:developers /data/mephi-2026
+   53  chmod 2770 /data/mephi-2026
+   54  setfacl -m u::rwx,g::rwx,g:curators:r-x,m::rwx,o::--- /data/mephi-2026
+   55  setfacl -d -m u::rwx,g::rwx,g:curators:r-x,m::rwx,o::--- /data/mephi-2026
+   56  getfacl /data/mephi-2026
+   57  sudo -u user1 touch /data/mephi-2026/test.txt
+   58  sudo -u user2 sh -c 'echo "test from user2" >> /data/mephi-2026/test.txt'
+   59  sudo -u curator1 cat /data/mephi-2026/test.txt
+   60  sudo -u curator1 sh -c 'echo "curator write" >> /data/mephi-2026/test.txt'
+   61  sudo -u nobody cat /data/mephi-2026/test.txt
+   62  ls -l /usr/sbin/tcpdump
+   63  getcap /usr/sbin/tcpdump
+   64  setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
+   65  getcap /usr/sbin/tcpdump
+   66  sudo -u user1 /usr/sbin/tcpdump -c 3
+   67  getcap /usr/sbin/tcpdump > /root/mephi-session-project-2026/getcap.out
+   68  cat /root/mephi-session-project-2026/getcap.out
+   69  getenforce
+   70  getenforce > /root/mephi-session-project-2026/getenforce.out
+   71  cat /root/mephi-session-project-2026/getenforce.out
+   72  ls -Zd /mephi-web
+   73  command -v semanage
+   74  dnf provides '*/semanage'
+   75  dnf install -y policycoreutils-python-utils
+   76  command -v semanage
+   77  semanage fcontext -a -t httpd_sys_content_t '/mephi-web(/.*)?'
+   78  restorecon -Rv /mephi-web
+   79  ls -Zd /mephi-web
+   80  grep -R "root " /etc/nginx/nginx.conf /etc/nginx/conf.d 2>/dev/null
+   81  nano /etc/nginx/nginx.conf
+   82  nginx -t
+   83  systemctl restart nginx
+   84  echo 'Hello from Student: M265859' > /mephi-web/index.html
+   85  restorecon -Rv /mephi-web
+   86  ls -Z /mephi-web/index.html
+   87  curl http://localhost/
+   88  usermod -s /sbin/nologin curator1
+   89  usermod -s /sbin/nologin curator2
+   90  getent passwd curator1
+   91  getent passwd curator2
+   92  chage -M 90 user1
+   93  chage -M 90 user2
+   94  chage -M 90 user3
+   95  chage -M 90 curator1
+   96  chage -M 90 curator2
+   97  chage -l user1
+   98  nano /etc/security/pwquality.conf
+   99  grep -E '^[[:space:]]*minlen' /etc/security/pwquality.conf
+  100  grep '^PASS_MAX_DAYS' /etc/login.defs
+  101  nano /etc/login.defs
+  102  grep '^PASS_MAX_DAYS' /etc/login.defs
+  103  cd /root/mephi-session-project-2026
+  104  pwd
+  105  ls 
+  106  stat /data/mephi-2026 > /root/mephi-session-project-2026/stat.out
+  107  stat /mephi-web >> /root/mephi-session-project-2026/stat.out
+  108  curl http://localhost/ > /root/mephi-session-project-2026/curl.out
+  109  cp /etc/fstab /root/mephi-session-project-2026/fstab
+  110  cp /etc/passwd /root/mephi-session-project-2026/passwd
+  111  cp /etc/shadow /root/mephi-session-project-2026/shadow
+  112  cp /etc/group /root/mephi-session-project-2026/group
+  113  cp /etc/security/pwquality.conf /root/mephi-session-project-2026/pwquality.conf
+  114  history > /root/mephi-session-project-2026/history.out
+  115  ls -l
+  116  curl http://localhost/
+  117  cat /root/mephi-session-project-2026/curl.out 
+  118  cat /root/mephi-session-project-2026/getenforce.out 
+  119  cat /root/mephi-session-project-2026/getcap.out 
+  120  grep MEPHI_WEB /root/mephi-session-project-2026/fstab
+  121  grep '^PASS_MAX_DAYS' /etc/login.defs 
+  122  grep -E '^[[:space:]]*minlen' /etc/security/pwquality.conf
+  123  git init
+  124  dnf install -y git
+  125  git init
+  126  git add .
+  127  git status
+  128  git config --global user.name "Dmitry Karpenko"
+  129  git config --global user.email "karpenko-kda@yandex.ru"
+  130  git branch -M main
+  131  dnf history > dnf.out
+  132  git add dnf.out
+  133  history > history.out
